@@ -1,13 +1,13 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom"
 import Home from "./components/Home"
-import MenClothingCategory from "./components/MenClothingCategory"
+import CategoryPage from "./components/CategoryPage"
 
 const Router = () => {
     return (
         <BrowserRouter>
             <Routes>
                 <Route path='/' element={<Home/>}/>
-                <Route path="/men's clothing" element={<MenClothingCategory/>}/>
+                <Route path="/category/:categoryName" element={<CategoryPage/>} />
             </Routes>
         </BrowserRouter>
     )

@@ -1,32 +1,29 @@
 import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import NavBar from "./NavBar";
 
-const MenClothingCategory = () => {
-    const [error, setError] = useState(null);
+const CategoryPage = () => {
+    const { categoryName } = useParams();
     const [products, setProducts] = useState([]);
 
     useEffect(() => {
-        fetch("https://fakestoreapi.com/products/category/men's clothing")
-            .then(res => res.json())
-            .then(
-                (result) => {
-                    console.log(result);
-                    setProducts(result);
-                },
-                (error) => {
-                    setError(error);
-                }
-            )
-    }, [])
-    if (error) {
-        return <div>Erreur: {error.message} </div>;
-    } else {
-        return (
-            <section className="container mx-52 px-4 py-8">
+        fetch(`https://fakestoreapi.com/products/category/${categoryName}`)
+            .then(response => response.json())
+            .then(result => {
+                const last5Products = result.slice(-5);
+                setProducts(last5Products)})
+            .catch(error => console.error("Error fetching products:", error));
+    }, [categoryName]);
+
+    return (
+        <div className="min-h-screen">
+            <NavBar />
+            <section className="container mx-52 px-4 py-8 flex justify-start items-start">
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                     {products.map(product => (
                         <div key={product.id} className="bg-white rounded-lg shadow-md overflow-hidden text-center">
                             <p className="text-gray-400">{product.category}</p>
-                            <img src={product.image} alt={product.title} className="w-full h-64 object-contain mt-4" />
+                            <img src={product.image} alt={product.title} className="w-full h-64 object-contain mt-4 px-4" />
                             <div className="p-4">
                                 <h2 className="text-lg font-semibold text-gray-800 min-h-20">{product.title}</h2>
                                 <div className="flex justify-between items-center mt-2">
@@ -40,7 +37,7 @@ const MenClothingCategory = () => {
                     ))}
                 </div>
             </section>
-        )
-    }
-}
-    export default MenClothingCategory
+        </div>
+)};
+
+export default CategoryPage;
